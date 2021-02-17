@@ -6,8 +6,9 @@ except RuntimeError:
 # To keep source compatibility with Pololu's library using wiringPi we keep the range as -480 to 480
 # Motor speeds for this library are specified as numbers
 # between -MAX_SPEED and MAX_SPEED, inclusive.
-_max_speed = 480.0  # 19.2 MHz / 2 / 480 = 20 kHz
-_frequency = 1000
+_max_speed = 480
+# RPi.GPIO currently doesn't support hardware PWM so we use a relatively low frequency
+_frequency = 3000
 MAX_SPEED = _max_speed
 
 # Default GPIO pin assignments
@@ -20,10 +21,10 @@ MOTOR2_DIR_PIN = 6
 m1_pwm = None
 m2_pwm = None
 
-io_initialized = False
 def io_init():
-    global io_initialized, m1_pwm, m2_pwm
-    if io_initialized:
+    """GPIO initializer - global as done once regardless of number of instances of Motor/Motors classes"""
+    global m1_pwm, m2_pwm
+    if not m1_pwm == None:
         return
 
     GPIO.setmode(GPIO.BCM)
@@ -33,9 +34,8 @@ def io_init():
     m1_pwm.start(0)
     m2_pwm.start(0)
 
-    io_initialized = True
-
 def cleanup():
+    """Global cleanup"""
     global motors
     m1_pwm.stop()
     m2_pwm.stop()
@@ -67,7 +67,7 @@ class Motor(object):
         if speed > 100:
             speed = 100
         self.pwm.ChangeDutyCycle(speed)
-        GPIO.output(self.dir_pin)
+        GPIO.output(self.dir_pin, dir_value)
  
 class Motors(object):
     MAX_SPEED = _max_speed
