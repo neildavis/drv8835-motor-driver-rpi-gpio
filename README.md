@@ -9,8 +9,6 @@ Unlike the Pololu driver there is no dependency on the deprecated [wiringPi](htt
 ### **IMPORTANT**
 A major consequence of using `RPi.GPIO` instead of wiringPi is that there is currently no support for the hardware PWM capabilities of the Pi on GPIO pins 12 & 13. PWM is implemented in software which will incur **significant CPU overhead**, and much **lower PWM frequencies** will typically be used (e.g. 3 KHz vs 20 KHz, i.e. non-ultrasonic)
 
-Programs that use this library will need to be run as the root user so they can access the GPIO pins.
-
 ## Getting Started
 
 ### Installation
@@ -32,7 +30,7 @@ sudo python setup.py install
 This library comes with an example program that drives each motor in both directions.  To run the example, navigate to the `drv8835-motor-driver-rpi` directory and run:
 
 ```bash
-sudo python example.py
+python example.py
 ```
 
 ## Library reference
