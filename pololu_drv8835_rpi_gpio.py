@@ -83,7 +83,7 @@ class Motors(object):
         self.motor2.setSpeed(m2_speed)
 
     def setSpeedsPercent(self, m1_speed, m2_speed):
-        self.motor1.setSpeed(m1_speed)
-        self.motor2.setSpeed(m2_speed)
+        self.motor1.setSpeedPercent(m1_speed)
+        self.motor2.setSpeedPercent(m2_speed)
 
 motors = Motors()
