@@ -36,7 +36,7 @@ python example.py
 ## Library reference
 This library uses 3&nbsp;kHz software PWM to drive the motors.
 
-In order to keep source compatibility with Pololu's driver, motor speeds in this library are represented as numbers between *-480* and *480* (inclusive).  A speed of 0 corresponds to braking.  Positive speeds correspond to current flowing from M1A/M2A to M1B/M2B, while negative speeds correspond to current flowing in the other direction.
+In order to keep source compatibility with Pololu's driver API, absolute motor speeds in this library are represented as numbers between *-480* and *480* (inclusive).  Additional methods are provided to allow speed to be represented in percentage terms, i.e. as numbers between *-100* and *100* (inclusive).  A speed of 0 corresponds to braking.  Positive speeds correspond to current flowing from M1A/M2A to M1B/M2B, while negative speeds correspond to current flowing in the other direction.
 
 The library can be imported into a Python program with the following line:
 
@@ -44,19 +44,32 @@ The library can be imported into a Python program with the following line:
 from pololu_drv8835_rpi_gpio import motors, MAX_SPEED, cleanup
 ```
 
-After importing the library, you can use the commands below to set motor speeds:
-
-- ```motors.setSpeeds(m1_speed, m2_speed)```: Set speed and direction for both motor 1 and motor 2.
-- ```motors.motor1.setSpeed(speed)```: Set speed and direction for motor 1.
-- ```motors.motor2.setSpeed(speed)```: Set speed and direction for motor 2.
-
 For convenience, a constant called ```MAX_SPEED``` (which is equal to 480) is available on all the objects provided by this library.  You can access it directly by just writing ```MAX_SPEED``` if you imported it as shown above, or it can be accessed in the following ways:
 
-- ```motors.MAX_SPEED```
-- ```motors.motor1.MAX_SPEED```
-- ```motors.motor2.MAX_SPEED```
+```python
+motors.MAX_SPEED
+motors.motor1.MAX_SPEED
+motors.motor2.MAX_SPEED
+```
+
+After importing the library, you can use the commands below to set motor speeds in *absolute* terms (```-MAX_SPEED``` <= speed <= ```MAX_SPEED```):
+
+```python
+motors.setSpeeds(m1_speed, m2_speed) # Set speed and direction for both motor 1 and motor 2.
+motors.motor1.setSpeed(speed) #Set speed and direction for motor 1.
+motors.motor2.setSpeed(speed) #Set speed and direction for motor 2.
+```
+
+Alternatively, you can use the commands below to set the motor speeds in *percentage* terms (```-100``` <= speed <= ```100```):
+
+```python
+motors.setSpeedsPercent(m1_speed, m2_speed) # Set speed and direction for both motor 1 and motor 2.
+motors.motor1.setSpeedPercent(speed) #Set speed and direction for motor 1.
+motors.motor2.setSpeedPercent(speed) #Set speed and direction for motor 2.
+```
 
 When you are finished, before exiting your program call the library's `cleanup` function to ensure all GPIO resources are reset:
+
  ```python
  cleanup()
  ```
